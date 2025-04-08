@@ -98,7 +98,7 @@ def download_folder(config_key="home-url", json_file="config.json"):
         print(f"Error loading config: {e}")
         return 0
 
-    download_dir = os.path.join(os.getcwd(), "download")
+    download_dir = os.path.join(os.getcwd(), "downloads")
     os.makedirs(download_dir, exist_ok=True)
 
     if "sharepoint" in sharepoint_url.lower():
