@@ -109,4 +109,4 @@ def download_folder(config_key="home-url", json_file="config.json"):
         print(f"URL not supported: {sharepoint_url}")
         return 0
 
-# download_folder("home-url", "testconfig.json")
+# download_folder("home-url", "config.json")
