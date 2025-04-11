@@ -324,15 +324,13 @@ def cleanup(slideshow_process=None):
 
 
 if __name__ == '__main__':
-	global exit_flag, restart_flag
-    
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-    
-    while True:
-        # Reset flags at the beginning of each run
-        exit_flag = False
-        restart_flag = False
+	# global exit_flag, restart_flag
+	signal.signal(signal.SIGINT, signal_handler)
+	signal.signal(signal.SIGTERM, signal_handler)
+	while True:
+		# Reset flags at the beginning of each run
+		exit_flag = False
+		restart_flag = False
 
 		# Clear Existing files
 		clear_contents(download_dir)
@@ -343,34 +341,34 @@ if __name__ == '__main__':
 		download_calendar("calendar-url", config_file, destination_folder)
 		process_extracted_folders()
 		create_composite()
-        
-        # image_dir = "/path/to/your/image/directory"  # Update this with your path
-        screen_resolution = get_screen_resolution()
-        fd, old_settings = setup_keyboard()
-        slideshow_process = None
-        keyboard_thread = None
-        if fd is not None:
-            keyboard_thread = threading.Thread(target=check_for_input, args=(fd,))
-            keyboard_thread.daemon = True
-            keyboard_thread.start()
-            print("Slideshow started. Press 'q' to quit or 'r' to restart")
-        else:
-            print("Not running in a terminal - keyboard controls disabled")
-        try:
-            slideshow_process = playslides(destination_folder+"/extracted/comps/", screen_resolution)
-            while not exit_flag and not restart_flag:
-                time.sleep(0.5)
-                if slideshow_process and slideshow_process.poll() is not None:
-                    print("Slideshow process has ended")
-                    break
-        finally:
-            cleanup(slideshow_process)
-            restore_keyboard(fd, old_settings)
-            if keyboard_thread and keyboard_thread.is_alive():
-                keyboard_thread.join(timeout=1.0)
-        if exit_flag:
-            print("Exiting slideshow application")
-            break
-        if restart_flag:
-            print("Restarting slideshow application")
-            continue
+
+		# image_dir = "/path/to/your/image/directory"  # Update this with your path
+		screen_resolution = get_screen_resolution()
+		fd, old_settings = setup_keyboard()
+		slideshow_process = None
+		keyboard_thread = None
+		if fd is not None:
+		    keyboard_thread = threading.Thread(target=check_for_input, args=(fd,))
+		    keyboard_thread.daemon = True
+		    keyboard_thread.start()
+		    print("Slideshow started. Press 'q' to quit or 'r' to restart")
+		else:
+		    print("Not running in a terminal - keyboard controls disabled")
+		try:
+		    slideshow_process = playslides(destination_folder+"/extracted/comps/", screen_resolution)
+		    while not exit_flag and not restart_flag:
+		        time.sleep(0.5)
+		        if slideshow_process and slideshow_process.poll() is not None:
+		            print("Slideshow process has ended")
+		            break
+		finally:
+		    cleanup(slideshow_process)
+		    restore_keyboard(fd, old_settings)
+		    if keyboard_thread and keyboard_thread.is_alive():
+		        keyboard_thread.join(timeout=1.0)
+		if exit_flag:
+		    print("Exiting slideshow application")
+		    break
+		if restart_flag:
+		    print("Restarting slideshow application")
+		    continue
