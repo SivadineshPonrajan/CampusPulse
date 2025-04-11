@@ -4,6 +4,7 @@ import textwrap
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -15,11 +16,7 @@ def get_calendar(calendar_url, destination):
     IMAGE_WIDTH = 800  # Base width in pixels
     IMAGE_HEIGHT = int(IMAGE_WIDTH * ASPECT_RATIO[1] / ASPECT_RATIO[0])  # Height calculated from aspect ratio
 
-    # Selenium setup to scrape events
-    chrome_options = Options()
-    chrome_options.add_argument("--headless=new")  # Comment out for debug
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
+    gecko_path = "/usr/local/bin/geckodriver"
 
     try:
         chrome_options = ChromeOptions()
@@ -30,7 +27,7 @@ def get_calendar(calendar_url, destination):
     except WebDriverException as e:
         firefox_options = FirefoxOptions()
         firefox_options.headless = True  # Optional: headless mode
-        driver = webdriver.Firefox(options=firefox_options, executable_path="/usr/local/bin/geckodriver")
+        driver = webdriver.Firefox(service=Service(gecko_path), options=firefox_options)
     driver.get(calendar_url)
 
     # Wait for events to load
