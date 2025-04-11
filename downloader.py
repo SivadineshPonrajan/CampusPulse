@@ -86,7 +86,7 @@ def download_dropbox(dropbox_url, download_dir):
         return 0
 
 
-def download_folder(config_key="home-url", json_file="config.json"):
+def download_folder(config_key="home-url", json_file="config.json", destination="downloads"):
     try:
         with open(json_file) as f:
             config = json.load(f)
@@ -98,7 +98,7 @@ def download_folder(config_key="home-url", json_file="config.json"):
         print(f"Error loading config: {e}")
         return 0
 
-    download_dir = os.path.join(os.getcwd(), "downloads")
+    download_dir = os.path.join(os.getcwd(), destination)
     os.makedirs(download_dir, exist_ok=True)
 
     if "sharepoint" in sharepoint_url.lower():
@@ -109,4 +109,4 @@ def download_folder(config_key="home-url", json_file="config.json"):
         print(f"URL not supported: {sharepoint_url}")
         return 0
 
-# download_folder("home-url", "config.json")
+# download_folder("home-url", "config.json", "downloads")
