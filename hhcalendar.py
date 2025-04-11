@@ -4,6 +4,7 @@ import textwrap
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from PIL import Image, ImageDraw, ImageFont
@@ -26,7 +27,7 @@ def get_calendar(calendar_url, destination):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         driver = webdriver.Chrome(options=chrome_options)
-    except Exception as e:
+    except WebDriverException as e:
         firefox_options = FirefoxOptions()
         firefox_options.headless = True  # Optional: headless mode
         driver = webdriver.Firefox(options=firefox_options)

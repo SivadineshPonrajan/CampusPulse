@@ -7,6 +7,7 @@ import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -28,7 +29,7 @@ def download_sharepoint(sharepoint_url, download_dir):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         driver = webdriver.Chrome(options=chrome_options)
-    except Exception as e:
+    except WebDriverException as e:
         firefox_options = FirefoxOptions()
         firefox_options.headless = True  # Optional: headless mode
         driver = webdriver.Firefox(options=firefox_options)
