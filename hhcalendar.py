@@ -30,7 +30,7 @@ def get_calendar(calendar_url, destination):
     except WebDriverException as e:
         firefox_options = FirefoxOptions()
         firefox_options.headless = True  # Optional: headless mode
-        driver = webdriver.Firefox(options=firefox_options)
+        driver = webdriver.Firefox(options=firefox_options, executable_path="/usr/local/bin/geckodriver")
     driver.get(calendar_url)
 
     # Wait for events to load

@@ -32,7 +32,7 @@ def download_sharepoint(sharepoint_url, download_dir):
     except WebDriverException as e:
         firefox_options = FirefoxOptions()
         firefox_options.headless = True  # Optional: headless mode
-        driver = webdriver.Firefox(options=firefox_options)
+        driver = webdriver.Firefox(options=firefox_options, executable_path="/usr/local/bin/geckodriver")
 
     try:
         print(f"Trying to download from sharepoint")
