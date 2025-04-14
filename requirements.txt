@@ -1,4 +1,4 @@
-selenium
+requests
 beautifulsoup4
-icalendar
+selenium==3.8.0
 pillow

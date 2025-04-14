@@ -1,7 +1,19 @@
-wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux-aarch64.tar.gz
-tar -xvzf geckodriver-v0.36.0-linux-aarch64.tar.gz
+#!/bin/bash
 
-chmod +x geckodriver
-sudo mv geckodriver /usr/local/bin/
+sudo apt update && sudo apt install -y \
+python3-dev python3-pip python3-setuptools \
+libjpeg-dev zlib1g-dev libtiff5-dev libfreetype6-dev \
+liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
+build-essential chromium-chromedriver chromium \
+wget unzip feh
 
-sudo apt install firefox-esr 
+python -m venv ~/.campuspulse
+
+source ~/.campuspulse/bin/activate
+
+python -m pip install --upgrade pip
+
+pip install -r requirements.txt --no-input
+
+echo "Setup completed. Virtual environment is ready at ~/.campuspulse"
+echo "Run the start file with 'sudo ./start.sh'"

@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 import zipfile
 import subprocess
@@ -18,7 +19,7 @@ import glob
 exit_flag = False
 restart_flag = False
 
-config_file = "testconfig.json"
+config_file = "config.json"
 
 destination_folder = "downloads"
 # Download Path
@@ -276,7 +277,7 @@ def signal_handler(sig, frame):
     print(f"Received signal {sig}, exiting...")
     exit_flag = True
 
-def playslides(image_dir, screen_resolution=None):
+def playslides(image_dir, screen_resolution=None, t_slide=30):
     png_files = glob.glob(os.path.join(image_dir, "*.png"))
     if not png_files:
         print("No PNG files found in the specified directory.")
@@ -293,7 +294,7 @@ def playslides(image_dir, screen_resolution=None):
         "-Y",              # Hide mouse cursor
         "-N",              # No filename display
         "--auto-zoom",     # Auto zoom to fit screen
-        "--slideshow-delay", "2",  # 2-second delay between slides
+        "--slideshow-delay", t_slide,  # 2-second delay between slides
         image_dir
     ]
     
@@ -341,8 +342,14 @@ if __name__ == '__main__':
 		download_calendar("calendar-url", config_file, destination_folder)
 		process_extracted_folders()
 		create_composite()
+		break
 
-		# image_dir = "/path/to/your/image/directory"  # Update this with your path
+		t_slide = 30
+
+		with open(config_file, 'r') as f:
+    		config = json.load(f)
+    	t_slide = int(config.get("Slide-timing", 30)) 
+
 		screen_resolution = get_screen_resolution()
 		fd, old_settings = setup_keyboard()
 		slideshow_process = None
@@ -355,7 +362,7 @@ if __name__ == '__main__':
 		else:
 		    print("Not running in a terminal - keyboard controls disabled")
 		try:
-		    slideshow_process = playslides(destination_folder+"/extracted/comps/", screen_resolution)
+		    slideshow_process = playslides(destination_folder+"/extracted/comps/", screen_resolution, t_slide)
 		    while not exit_flag and not restart_flag:
 		        time.sleep(0.5)
 		        if slideshow_process and slideshow_process.poll() is not None:

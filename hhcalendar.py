@@ -24,7 +24,7 @@ def get_calendar(calendar_url, destination):
     driver.get(calendar_url)
 
     # Wait for events to load
-    time.sleep(5)
+    time.sleep(3)
 
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
@@ -218,4 +218,4 @@ def download_calendar(key="calendar-url", json_file="config.json", destination="
         print(f"Error loading config: {e}")
         return 0
 
-# download_calendar("calendar-url", "testconfig.json", "downloads")
+# download_calendar("calendar-url", "config.json", "downloads")
