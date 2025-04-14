@@ -342,14 +342,10 @@ if __name__ == '__main__':
 		download_calendar("calendar-url", config_file, destination_folder)
 		process_extracted_folders()
 		create_composite()
-		break
-
 		t_slide = 30
-
 		with open(config_file, 'r') as f:
-    		config = json.load(f)
-    	t_slide = int(config.get("Slide-timing", 30)) 
-
+			config = json.load(f)
+		t_slide = int(config.get("Slide-timing", 30)) 
 		screen_resolution = get_screen_resolution()
 		fd, old_settings = setup_keyboard()
 		slideshow_process = None
