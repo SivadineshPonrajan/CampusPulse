@@ -5,10 +5,7 @@ import time
 import requests
 import subprocess
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,17 +21,18 @@ def wait_for_downloads(download_dir, timeout=120):
     raise TimeoutError("Download did not complete within the timeout.")
 
 def download_sharepoint(sharepoint_url, download_dir):
-    gecko_path = "/usr/local/bin/geckodriver"
-    try:
-        chrome_options = ChromeOptions()
-        chrome_options.add_argument("--headless")  # Optional: headless mode
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        driver = webdriver.Chrome(options=chrome_options)
-    except WebDriverException as e:
-        firefox_options = FirefoxOptions()
-        firefox_options.headless = True  # Optional: headless mode
-        driver = webdriver.Firefox(service=Service(gecko_path), options=firefox_options)
+    chrome_options = Options()
+    chrome_options.add_experimental_option("prefs", {
+        "download.default_directory": download_dir,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True
+    })
+    chrome_options.add_argument("--headless=new")  # Comment out for debug
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(options=chrome_options)
 
     try:
         print(f"Trying to download from sharepoint")
