@@ -277,7 +277,7 @@ def signal_handler(sig, frame):
     print(f"Received signal {sig}, exiting...")
     exit_flag = True
 
-def playslides(image_dir, screen_resolution=None, t_slide=30):
+def playslides(image_dir, screen_resolution=None, t_slide="30"):
     png_files = glob.glob(os.path.join(image_dir, "*.png"))
     if not png_files:
         print("No PNG files found in the specified directory.")
@@ -294,7 +294,7 @@ def playslides(image_dir, screen_resolution=None, t_slide=30):
         "-Y",              # Hide mouse cursor
         "-N",              # No filename display
         "--auto-zoom",     # Auto zoom to fit screen
-        "--slideshow-delay", t_slide,  # 2-second delay between slides
+        "--slideshow-delay", t_slide,  # Seconds delay between slides
         image_dir
     ]
     
@@ -342,10 +342,9 @@ if __name__ == '__main__':
 		download_calendar("calendar-url", config_file, destination_folder)
 		process_extracted_folders()
 		create_composite()
-		t_slide = 30
 		with open(config_file, 'r') as f:
 			config = json.load(f)
-		t_slide = int(config.get("Slide-timing", 30)) 
+		t_slide = config.get("Slide-timing", "30")
 		screen_resolution = get_screen_resolution()
 		fd, old_settings = setup_keyboard()
 		slideshow_process = None
