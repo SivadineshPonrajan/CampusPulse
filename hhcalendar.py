@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import textwrap
 from datetime import datetime
@@ -23,47 +24,7 @@ def get_calendar(calendar_url, destination):
     driver.get(calendar_url)
 
     # Wait for events to load
-    driver.implicitly_wait(5)
-
-    try:
-        # Wait a short time for the dialog to appear (adjust timeout as needed)
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "env-modal-dialog__dialog"))
-        )
-        
-        # Dialog is present, find and click the "Accept necessary cookies" button
-        try:
-            # First try to find by exact button text
-            accept_button = driver.find_element(By.XPATH, 
-                "//button[contains(text(), 'Accept necessary cookies')]")
-            accept_button.click()
-            print("Clicked 'Accept necessary cookies' button")
-        except NoSuchElementException:
-            # If not found, try alternative selectors that might work
-            try:
-                # Try finding by partial text match
-                accept_button = driver.find_element(By.XPATH, 
-                    "//button[contains(text(), 'Accept necessary')]")
-                accept_button.click()
-                print("Clicked button with partial 'Accept necessary' text")
-            except NoSuchElementException:
-                # As a last resort, try to find any button in the dialog
-                dialog = driver.find_element(By.CLASS_NAME, "env-modal-dialog__dialog")
-                buttons = dialog.find_elements(By.TAG_NAME, "button")
-                for button in buttons:
-                    if "necessary" in button.text.lower():
-                        button.click()
-                        print(f"Clicked cookie button with text: {button.text}")
-                        break
-                
-        # Wait for the dialog to disappear
-        WebDriverWait(driver, 5).until_not(
-            EC.presence_of_element_located((By.CLASS_NAME, "env-modal-dialog__dialog"))
-        )
-        
-    except:
-        # No dialog found or it didn't appear in time, continue with scraping
-        print("No cookie consent dialog detected")
+    time.sleep(5)
 
     html = driver.page_source
     soup = BeautifulSoup(html, 'html.parser')
@@ -257,4 +218,4 @@ def download_calendar(key="calendar-url", json_file="config.json", destination="
         print(f"Error loading config: {e}")
         return 0
 
-download_calendar("calendar-url", "testconfig.json", "downloads")
+# download_calendar("calendar-url", "testconfig.json", "downloads")
