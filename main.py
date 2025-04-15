@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 import zipfile
+import argparse
 import subprocess
 from downloader import download_folder
 from hhcalendar import download_calendar
@@ -25,6 +26,10 @@ destination_folder = "downloads"
 # Download Path
 download_dir = os.path.join(os.getcwd(), destination_folder)
 expected_folders = {"left", "right"}
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-skip', action='store_true', help='Skip downloading files')
+args = parser.parse_args()
 
 # =====================================================================================
 
@@ -332,16 +337,16 @@ if __name__ == '__main__':
 		# Reset flags at the beginning of each run
 		exit_flag = False
 		restart_flag = False
-
-		# Clear Existing files
-		clear_contents(download_dir)
-		# download files from home-url
-		check = download_folder("home-url", config_file, destination_folder)
-		unzip_n_check(download_dir)
-		# download calendar
-		download_calendar("calendar-url", config_file, destination_folder)
-		process_extracted_folders()
-		create_composite()
+		if not args.skip:
+			# Clear Existing files
+			clear_contents(download_dir)
+			# download files from home-url
+			check = download_folder("home-url", config_file, destination_folder)
+			unzip_n_check(download_dir)
+			# download calendar
+			download_calendar("calendar-url", config_file, destination_folder)
+			process_extracted_folders()
+			create_composite()
 		with open(config_file, 'r') as f:
 			config = json.load(f)
 		t_slide = config.get("Slide-timing", "30")
