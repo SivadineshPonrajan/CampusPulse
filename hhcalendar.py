@@ -2,6 +2,7 @@ import os
 import time
 import json
 import textwrap
+import subprocess
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -57,10 +58,14 @@ def get_calendar(calendar_url, destination):
         img = Image.new('RGB', (IMAGE_WIDTH, IMAGE_HEIGHT), color='#E3EDF5')
         draw = ImageDraw.Draw(img)
         fname = ""
-        
+        try:
+            res=subprocess.check_output("fc-list | grep -i Helvetica-Bold.ttf | head -n 1 | cut -d: -f1", shell=True, text=True)
+            fname=res.strip()
+        except:
+            fname="Helvetica-Bold"
+
         # Try to load fonts - use default if specific fonts not available
         try:
-            fname = "Helvetica-Bold"
             title_font = ImageFont.truetype(fname, 30) 
             event_title_font = ImageFont.truetype(fname, 20)
             date_font = ImageFont.truetype(fname, 22)
@@ -82,6 +87,7 @@ def get_calendar(calendar_url, destination):
                 fname = ImageFont.load_default()
         
         # Draw title with proper positioning
+        # print(fname)
         calendar_w = draw.textlength("CALENDAR", font=title_font)
         draw.text(((IMAGE_WIDTH - calendar_w) // 2, 30), "CALENDAR", fill="#000814", font=title_font)
         
@@ -218,4 +224,4 @@ def download_calendar(key="calendar-url", json_file="config.json", destination="
         print(f"Error loading config: {e}")
         return 0
 
-# download_calendar("calendar-url", "config.json", "downloads")
+download_calendar("calendar-url", "config.json", "downloads")
