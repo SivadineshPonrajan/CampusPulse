@@ -59,35 +59,29 @@ def get_calendar(calendar_url, destination):
         draw = ImageDraw.Draw(img)
         fname = ""
         try:
-            res=subprocess.check_output("fc-list | grep -i Helvetica-Bold.ttf | head -n 1 | cut -d: -f1", shell=True, text=True)
+            res=subprocess.check_output("fc-list | grep -i 'ARIALBD.TTF' | head -n 1 | cut -d: -f1", shell=True, text=True)
             fname=res.strip()
         except:
-            fname="Helvetica-Bold"
+            fname="Arial Bold"
 
         # Try to load fonts - use default if specific fonts not available
         try:
-            title_font = ImageFont.truetype(fname, 30) 
+            fname = "Arial Bold"
+            title_font = ImageFont.truetype(fname, 30)
             event_title_font = ImageFont.truetype(fname, 20)
             date_font = ImageFont.truetype(fname, 22)
-            desc_font = ImageFont.truetype(fname.replace("-Bold", ""), 14)
+            desc_font = ImageFont.truetype(fname.replace(" Bold", ""), 14)
         except IOError:
-            try:
-                fname = "Arial Bold"
-                title_font = ImageFont.truetype(fname, 30)
-                event_title_font = ImageFont.truetype(fname, 20)
-                date_font = ImageFont.truetype(fname, 22)
-                desc_font = ImageFont.truetype(fname.replace(" Bold", ""), 14)
-            except IOError:
-                # Fallback to default font
-                title_font = ImageFont.load_default()
-                event_title_font = ImageFont.load_default()
-                date_font = ImageFont.load_default()
-                time_font = ImageFont.load_default()
-                desc_font = ImageFont.load_default()
-                fname = ImageFont.load_default()
+            # Fallback to default font
+            title_font = ImageFont.load_default()
+            event_title_font = ImageFont.load_default()
+            date_font = ImageFont.load_default()
+            time_font = ImageFont.load_default()
+            desc_font = ImageFont.load_default()
+            fname = ImageFont.load_default()
         
         # Draw title with proper positioning
-        # print(fname)
+        print(fname)
         calendar_w = draw.textlength("CALENDAR", font=title_font)
         draw.text(((IMAGE_WIDTH - calendar_w) // 2, 30), "CALENDAR", fill="#000814", font=title_font)
         
