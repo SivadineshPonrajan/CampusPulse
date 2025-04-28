@@ -66,7 +66,6 @@ def get_calendar(calendar_url, destination):
 
         # Try to load fonts - use default if specific fonts not available
         try:
-            fname = "Arial Bold"
             title_font = ImageFont.truetype(fname, 30)
             event_title_font = ImageFont.truetype(fname, 20)
             date_font = ImageFont.truetype(fname, 22)

@@ -29,4 +29,4 @@ echo "Cleanup complete."
 echo "Rebuilding font cache..."
 fc-cache -f -v
 
-echo "Helvetica fonts installed successfully."
+echo "Arial fonts installed successfully."
