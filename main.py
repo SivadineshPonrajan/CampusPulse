@@ -315,7 +315,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    slideshow_timeout = 2 * 60 
+    slideshow_timeout = 12 * 60 * 60  # 12 hours in seconds 
 
     while True:
         slideshow_start_time = time.time()

@@ -9,7 +9,7 @@ def create_composite():
     
     # Paths
     left_dir = 'downloads/extracted/left'
-    right_dir = 'downloads/extracted/Right'
+    right_dir = 'downloads/extracted/right'
     calendar_path = 'downloads/calendar.png'
     home_path = 'home/home.png'
 
