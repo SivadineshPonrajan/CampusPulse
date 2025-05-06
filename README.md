@@ -4,9 +4,10 @@ CampusPulse - University community connected with everyday announcements, events
 
 ## 📋 Prerequisites
 
-- Raspberry Pi with 64bit OS image installed
+- Raspberry Pi with 64-bit OS image installed
 - Internet connection
-- Sharepoint folder setup with proper structure
+- SharePoint folder setup with proper structure
+- Supports JPG/JPEG/PNG/PDF files to display.
 
 ## 🚀 Installation Guide
 
@@ -35,21 +36,21 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt --no-input
 ```
 
-### 4. Configure Sharepoint folder
+### 4. Configure the SharePoint folder
 
-- Create two folders named `left` and `right` inside your Sharepoint folder
+- Create two folders named `left` and `right` inside your SharePoint folder
 - Add content to display on the left side to the "left" folder
 - Add content to display on the right side to the "right" folder
 
 ![Folder Structure](./images/FolderStructure.png)
 
-- Set the Sharepoint folder sharing permission to `"Anyone with the link"`
-- Add your Sharepoint URL to the `home-url` field in the `config.json` file
+- Set the SharePoint folder sharing permission to `"Anyone with the link"`
+- Add your SharePoint URL to the `home-url` field in the `config.json` file
 - Customize slide timings in the `config.json` file if needed.
 
 ![config file](./images/config.png)
 
-### 5. Create autostart script
+### 5. Create an autostart script
 
 ```bash
 mkdir -p ~/.config/autostart/
@@ -79,15 +80,17 @@ Voilaaa... You are done! 🎉
 
 ## 🛠️ Working
 
-- `main.py` is the main file and it initially downloads the folders from Sharepoint.
+- `main.py` is the main file that downloads the folders from SharePoint and displays.
 - The files to be displayed should be in the form of images as `jpg/jpeg/png` or `PDF`.
 - Scrapes the events from the public HH calendar and creates an image.
 - Creates a combination of images and starts the slideshow.
-- Every 12 hours it redownloads the new files and scrapes the calendar.
+- Every 12 hours, it redownloads the new files and scrapes the calendar.
 - The script will automatically start running on system start or reboot.
 
 **MAKE SURE THE RPI IS CONNECTED TO THE INTERNET!!!**
-If something goes wrong or an error occurs, just reboot or restart. 
+
+If something goes wrong or an error occurs, just reboot or restart.
+
 (Still not resolvable? Feel free to contact me 🙂)
 
 ## 🧑‍💻 Developer Guide
@@ -98,9 +101,9 @@ If something goes wrong or an error occurs, just reboot or restart.
 ├── fontinstall.sh  # Shell file to install font for calendar
 ├── setup.sh        # Linux packages installation
 ├── start.sh        # Shell file to run the main program exec
-├── config.json     # Config file for Sharepoint URL and each slide timing
+├── config.json     # Config file for SharePoint URL and each slide timing
 |
-├── downloader.py   # Code to download the files from Sharepoint
+├── downloader.py   # Code to download the files from SharePoint
 ├── hhcalendar.py   # Code to scrape the HH English calendar and make an image
 ├── composite.py    # Create combinations of images with the docs
 ├── main.py         # Main code
