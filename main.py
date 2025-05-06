@@ -3,6 +3,7 @@ import json
 import time
 import shutil
 import zipfile
+import requests
 import argparse
 import subprocess
 from pynput import keyboard
@@ -109,6 +110,12 @@ def convert_pdf_to_png(filepath):
 		return 0
 
 # =====================================================================================
+def has_internet():
+    try:
+        response = requests.get("http://www.google.com", timeout=5, stream=True)
+        return response.status_code == 200
+    except requests.RequestException:
+        return False
 # =====================================================================================
 
 def get_valid_files(folder_path):
@@ -312,65 +319,69 @@ def cleanup(slideshow_process=None):
 
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+	signal.signal(signal.SIGINT, signal_handler)
+	signal.signal(signal.SIGTERM, signal_handler)
 
-    slideshow_timeout = 12 * 60 * 60  # 12 hours in seconds 
+	slideshow_timeout = 12 * 60 * 60  # 12 hours in seconds 
 
-    while True:
-        slideshow_start_time = time.time()
+	while True:
+		slideshow_start_time = time.time()
 
-        if exit_flag:
-            print("Exiting slideshow application")
-            break
-        elif restart_flag:
-            # Reset flags at the beginning of each run
-            exit_flag = False
-            restart_flag = False
+		if exit_flag:
+			print("Exiting slideshow application")
+			break
+		elif restart_flag:
+			# Reset flags at the beginning of each run
+			exit_flag = False
+			restart_flag = False
 
-        if not args.skip:
-            # Clear Existing files
-            clear_contents(download_dir)
-            # Download files from home-url
-            check = download_folder("home-url", config_file, destination_folder)
-            unzip_n_check(download_dir)
-            # Download calendar
-            download_calendar("calendar-url", config_file, destination_folder)
-            process_extracted_folders()
-            create_composite()
+		if not args.skip:
+			# Clear Existing files
+			clear_contents(download_dir)
+			# Download files from home-url
+			check = download_folder("home-url", config_file, destination_folder)
+			unzip_n_check(download_dir)
+			# Download calendar
+			download_calendar("calendar-url", config_file, destination_folder)
+			process_extracted_folders()
+			create_composite()
 
-        with open(config_file, 'r') as f:
-            config = json.load(f)
+		with open(config_file, 'r') as f:
+			config = json.load(f)
 
-        t_slide = config.get("Slide-timing", "30")
-        screen_resolution = get_screen_resolution()
-        keyboard_listener = start_keyboard_listener()
-        slideshow_process = None
+		t_slide = config.get("Slide-timing", "30")
+		screen_resolution = get_screen_resolution()
+		keyboard_listener = start_keyboard_listener()
+		slideshow_process = None
 
-        print("Slideshow started. Press 'q' to quit or 'r' to restart")
+		print("Slideshow started. Press 'q' to quit or 'r' to restart")
 
-        try:
-            slideshow_process = playslides(destination_folder + "/extracted/comps/", screen_resolution, t_slide)
-            while not exit_flag and not restart_flag:
-                time.sleep(0.5)
-                elapsed_time = time.time() - slideshow_start_time
+		try:
+			slideshow_process = playslides(destination_folder + "/extracted/comps/", screen_resolution, t_slide)
+			while not exit_flag and not restart_flag:
+				time.sleep(0.5)
+				elapsed_time = time.time() - slideshow_start_time
 
-                if slideshow_process and slideshow_process.poll() is not None:
-                    print("Slideshow process has ended")
-                    break
+				if slideshow_process and slideshow_process.poll() is not None:
+					print("Slideshow process has ended")
+					break
 
-                if elapsed_time >= slideshow_timeout:
-                    print("Slideshow timed out, restarting...")
-                    restart_flag = True
-                    break
-        finally:
-            cleanup(slideshow_process)
-            if keyboard_listener:
-                keyboard_listener.stop()
+				if elapsed_time >= slideshow_timeout:
+					if has_internet():
+						print("Slideshow timed out, restarting...")
+						restart_flag = True
+						break
+					else:
+						print("Slideshow timed out, but no internet. Staying on current slides.")
+						slideshow_start_time = time.time()
+		finally:
+			cleanup(slideshow_process)
+			if keyboard_listener:
+				keyboard_listener.stop()
 
-        if exit_flag:
-            print("Exiting slideshow application")
-            break
-        if restart_flag:
-            print("Restarting slideshow application")
-            continue
+		if exit_flag:
+			print("Exiting slideshow application")
+			break
+		if restart_flag:
+			print("Restarting slideshow application")
+			continue
