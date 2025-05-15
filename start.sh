@@ -18,5 +18,6 @@ done
 echo "===== Started again at $(date) =====" >> "$LOG_FILE"
 
 source ~/.campuspulse/bin/activate
+cd /home/$(ls /home | head -n 1)/Desktop/campuspulse/
 echo "===== Starting run at $(date) ====="
 python /home/$(ls /home | head -n 1)/Desktop/campuspulse/main.py
