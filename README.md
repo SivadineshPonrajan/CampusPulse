@@ -57,12 +57,13 @@ mkdir -p ~/.config/autostart/
 nano ~/.config/autostart/campuspulse.desktop
 ```
 
-Copy and paste the following into the file:
+Copy and paste the following into the file and add the path in Exec:
 ```bash
 [Desktop Entry]
+Version=1.0
 Type=Application
 Name=CampusPulse
-Exec=/home/$(ls /home | head -n 1)/Desktop/campuspulse/start.sh
+Exec=PATH OF CAMPUSPULSE/campuspulse/start.sh
 X-GNOME-Autostart-enabled=true
 ```
 
