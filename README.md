@@ -63,7 +63,7 @@ Copy and paste the following into the file and add the path in Exec:
 Version=1.0
 Type=Application
 Name=CampusPulse
-Exec=PATH OF CAMPUSPULSE/campuspulse/start.sh
+Exec=/home/$(ls /home | head -n 1)/Desktop/campuspulse/start.sh
 X-GNOME-Autostart-enabled=true
 ```
 
